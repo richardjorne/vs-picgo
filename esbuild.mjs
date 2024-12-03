@@ -53,7 +53,9 @@ const resultHandler = async (result) => {
 const outdir = './dist'
 
 // clean old built files
-fse.rmdirSync(outdir, { recursive: true })
+if (fse.existsSync(outdir)) {
+  fse.rmdirSync(outdir, { recursive: true })
+}
 
 /** @type {import('esbuild').BuildOptions} */
 const commonOptions = {

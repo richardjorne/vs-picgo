@@ -22,5 +22,8 @@
   "config.picBed.github.description": "GitHub configuration.",
   "config.picBed.github.repo.description": "`Username/Repo`. For example, PicGo/Images",
   "config.picBed.aliyun.description": "Aliyun OSS configuration.",
-  "config.picBed.imgur.description": "Imgur picBed configuration."
+  "config.picBed.imgur.description": "Imgur picBed configuration.",
+  "config.useUploadVersionFolder.description": "Whether to save uploaded version files in a separate 'uploadVersion' folder",
+  "command.generate.uploadedImageVersionMarkdown.title": "Generate uploaded image version markdown",
+  "command.uploadedImageVersionMarkdownInTheSameFile.title": "Upload and replace all image links in the current file"
 }

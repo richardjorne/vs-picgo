@@ -18,6 +18,16 @@
 ## Features
 
 <details>
+<summary>Uploading all local images in the current file and get those links replaced</summary>
+<img src="https://s2.loli.net/2024/12/03/tiGcY68V2kjIgPZ.gif" alt="replace.gif">
+</details>
+
+<details>
+<summary>Generating uploaded version of the document while keeping the original hierarchy(when the option is enabled)</summary>
+<img src="https://s2.loli.net/2024/12/03/NKjXSIr1YJHasxf.gif" alt="generate.gif">
+</details>
+
+<details>
 <summary>Uploading an image from clipboard</summary>
 <img src="https://i.loli.net/2019/04/09/5cac17d2d2265.gif" alt="clipboard.gif">
 </details>

@@ -133,4 +133,8 @@ export class PicgoAddon {
       )
       .join('\n')
   }
+
+  outputToURLs(output: IImgInfo[]) {
+    return output.map((imgInfo) => imgInfo.imgUrl ?? '')
+  }
 }

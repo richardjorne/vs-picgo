@@ -19,6 +19,20 @@ export async function activate(context: vscode.ExtensionContext) {
       'picgo.uploadImageFromInputBox',
       async () => await CommandManager.commandManager.uploadImageFromInputBox()
     ),
+    vscode.commands.registerCommand(
+      'picgo.generateUploadedImageVersionMarkdown',
+      async () =>
+        await CommandManager.commandManager.generateUploadedImageVersionMarkdown(
+          false
+        )
+    ),
+    vscode.commands.registerCommand(
+      'picgo.uploadAndReplaceAllImageLinksInTheCurrentFile',
+      async () =>
+        await CommandManager.commandManager.generateUploadedImageVersionMarkdown(
+          true
+        )
+    ),
 
     vscode.commands.registerCommand('picgo.webviewDemo', () =>
       panelManager.createOrShowWebviewPanel('Demo')

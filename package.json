@@ -14,7 +14,7 @@
     "image upload",
     "picture upload"
   ],
-  "version": "2.1.6",
+  "version": "2.2.0",
   "publisher": "Spades",
   "engines": {
     "vscode": "^1.60.0"
@@ -29,6 +29,8 @@
     "onCommand:picgo.uploadImageFromInputBox",
     "onCommand:picgo.webviewDemo",
     "onCommand:picgo.webviewPicGoControlPanel",
+    "onCommand:picgo.generateUploadedImageVersionMarkdown",
+    "onCommand:picgo.uploadAndReplaceAllImageLinksInTheCurrentFile",
     "workspaceContains:vs-picgo-auto-launch.txt"
   ],
   "main": "./dist/extension",
@@ -58,6 +60,16 @@
         "command": "picgo.webviewPicGoControlPanel",
         "title": "%command.webview.picGoControlPanel.title%",
         "category": "PicGo"
+      },
+      {
+        "command": "picgo.generateUploadedImageVersionMarkdown",
+        "title": "%command.generate.uploadedImageVersionMarkdown.title%",
+        "category": "PicGo"
+      },
+      {
+        "command": "picgo.uploadAndReplaceAllImageLinksInTheCurrentFile",
+        "title": "%command.uploadedImageVersionMarkdownInTheSameFile.title%",
+        "category": "PicGo"
       }
     ],
     "keybindings": [
@@ -75,12 +87,27 @@
         "command": "picgo.uploadImageFromInputBox",
         "key": "ctrl+alt+O",
         "mac": "cmd+alt+O"
+      },
+      {
+        "command": "picgo.generateUploadedImageVersionMarkdown",
+        "key": "ctrl+alt+G",
+        "mac": "ctrl+alt+G"
+      },
+      {
+        "command": "picgo.uploadAndReplaceAllImageLinksInTheCurrentFile",
+        "key": "ctrl+alt+R",
+        "mac": "ctrl+alt+R"
       }
     ],
     "configuration": {
       "type": "object",
       "title": "%config.title%",
       "properties": {
+        "picgo.useUploadVersionFolder": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to save uploaded version files in a separate 'uploadVersion' folder"
+        },
         "picgo.configPath": {
           "type": "string",
           "markdownDescription": "%config.configPath.description%",
@@ -310,9 +337,22 @@
           "default": ""
         }
       }
-    }
+    },
+    "localizations": [{
+      "languageId": "zh-cn",
+      "languageName": "Chinese (Simplified)",
+      "localizedLanguageName": "中文(简体)",
+      "translations": [
+        {
+          "id": "vs-picgo",
+          "path": "./package.nls.zh-cn.json"
+        }
+      ]
+    }]
   },
-  "extensionKind": ["ui"],
+  "extensionKind": [
+    "ui"
+  ],
   "scripts": {
     "vscode:prepublish": "yarn && yarn build:prod",
     "build": "node esbuild.mjs",
@@ -426,5 +466,6 @@
     "react-use": "17.3.1",
     "redux": "4.1.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
