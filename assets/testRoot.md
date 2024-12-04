@@ -1,6 +1,7 @@
 This
 
 ![TEST](test.png "picgo logo")
+![TEST](<test.png> "picgo logo")
 
 is
 

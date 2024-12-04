@@ -14,7 +14,7 @@
     "image upload",
     "picture upload"
   ],
-  "version": "2.2.0",
+  "version": "2.2.1",
   "publisher": "Spades",
   "engines": {
     "vscode": "^1.60.0"

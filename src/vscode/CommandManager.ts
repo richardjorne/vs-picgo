@@ -123,7 +123,7 @@ export class CommandManager {
     // 1. Standard markdown: ![alt](url) or ![alt](url "title")
     // 2. HTML: <img src="url" ...>
     // 3. Obsidian: ![[filename]]
-    const mdImageRegex = /!\[([^\]]*)\]\(([^)\s]+)\s*(.*)?\)|<img[^>]+src=["']([^"']+)["'][^>]*>|!\[\[([^\]]+)\]\]/g
+    const mdImageRegex = /!\[([^\]]*)\]\((?:<([^>]+)>|([^)\s]+))\s*(.*)?\)|<img[^>]+src=["']([^"']+)["'][^>]*>|!\[\[([^\]]+)\]\]/g
     let match
     let hasLocalImage = false
     const replacements: Array<{ original: string; replacement: string }> = []
@@ -139,6 +139,9 @@ export class CommandManager {
       if (match[2]) {
         // Standard markdown
         imgUrl = match[2]
+      } else if (match[3]) {
+        // Standard markdown
+        imgUrl = match[3]
       } else if (match[4]) {
         // HTML format
         imgUrl = match[4]
@@ -202,6 +205,10 @@ export class CommandManager {
             // Markdown format
             const originalStr = match[0]
             replacement = originalStr.replace(match[2], newUrl)
+          } else if (match[3]) {
+            // Markdown format
+            const originalStr = match[0]
+            replacement = originalStr.replace(match[3], newUrl)
           } else if (match[4]) {
             // HTML format
             const originalStr = match[0]
