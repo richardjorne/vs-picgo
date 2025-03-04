@@ -123,13 +123,16 @@ export class CommandManager {
     // 1. Standard markdown: ![alt](url) or ![alt](url "title")
     // 2. HTML: <img src="url" ...>
     // 3. Obsidian: ![[filename]]
-    const mdImageRegex = /!\[([^\]]*)\]\((?:<([^>]+)>|([^)\s]+))\s*(.*)?\)|<img[^>]+src=["']([^"']+)["'][^>]*>|!\[\[([^\]]+)\]\]/g
+    // 4. YAML-style: cover: path/to/image or image: path/to/image
+    const mdImageRegex = /!\[([^\]]*)\]\((?:<([^>]+)>|([^)\s]+))\s*(.*)?\)|<img[^>]+src=["']([^"']+)["'][^>]*>|!\[\[([^\]]+)\]\]|((?:cover|image):\s*([^\s\n]+))/g
     let match
     let hasLocalImage = false
     const replacements: Array<{ original: string; replacement: string }> = []
 
     // Add a cache to store path -> url mappings
     const pathToUrlCache: Map<string, string> = new Map()
+    // Store the original matched path to preserve the format
+    const originalMatchToUrl: Map<string, string> = new Map()
 
     // Iterate through all matches
     while ((match = mdImageRegex.exec(text)) !== null) {
@@ -148,6 +151,9 @@ export class CommandManager {
       } else if (match[5]) {
         // Obsidian format
         imgUrl = match[5]
+      } else if (match[8]) {
+        // YAML-style format (cover: or image:)
+        imgUrl = match[8]
       }
 
       if (!imgUrl) continue
@@ -195,6 +201,8 @@ export class CommandManager {
             if (newUrls && newUrls.length > 0) {
               newUrl = newUrls[0]
               pathToUrlCache.set(absolutePath, newUrl)
+              // Also store the original matched path
+              originalMatchToUrl.set(imgUrl, newUrl)
             } else {
               continue // Skip if upload failed
             }
@@ -217,6 +225,10 @@ export class CommandManager {
             // Obsidian format
             const originalStr = match[0]
             replacement = originalStr.replace(match[5], newUrl)
+          } else if (match[8]) {
+            // YAML-style format
+            const originalStr = match[0]
+            replacement = originalStr.replace(match[8], newUrl)
           }
           replacements.push({
             original: match[0],
@@ -235,17 +247,22 @@ export class CommandManager {
 
     // Replace all local image links in the new file
     newEditor.edit((editBuilder) => {
-      for (let i = 0; i < replacements.length; i++) {
-        const { original, replacement } = replacements[i]
+      // First try to replace using the original matched paths
+      for (const [originalPath, remoteUrl] of originalMatchToUrl.entries()) {
         const fileText = newDocument.getText()
-        const startPos = newDocument.positionAt(fileText.indexOf(original))
-        const endPos = newDocument.positionAt(
-          fileText.indexOf(original) + original.length
-        )
-        editBuilder.replace(new vscode.Range(startPos, endPos), replacement)
-        showInfo(
-          `Replaced original image link ${original} with uploaded image link ${replacement}.`
-        )
+        let startIndex = 0
+        while (true) {
+          const index = fileText.indexOf(originalPath, startIndex)
+          if (index === -1) break
+
+          const startPos = newDocument.positionAt(index)
+          const endPos = newDocument.positionAt(index + originalPath.length)
+          editBuilder.replace(new vscode.Range(startPos, endPos), remoteUrl)
+          showInfo(
+            `Replaced local path ${originalPath} with remote URL ${remoteUrl}`
+          )
+          startIndex = index + 1
+        }
       }
     })
   }

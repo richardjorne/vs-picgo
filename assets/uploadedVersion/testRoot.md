@@ -1,6 +1,9 @@
+image: 
+
 This
 
 ![TEST](test.png "picgo logo")
+![TEST](<test.png> "picgo logo")
 
 is
 
@@ -11,5 +14,5 @@ a
 <!-- obsidian format -->
 ![[test.png]] 
 
-
+image: test.png
 test file
